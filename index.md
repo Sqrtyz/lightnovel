@@ -10,291 +10,106 @@
     </script>
 </head>
 
-下面是本次研究性学习的所有代码。
+### Chapter 0
 
-### 使用方法
+「离考试结束还有 30 分钟，请选手们抓紧时间」。
 
-+ 在本地下载一个 IDE（如 dev-c++, Vim, VSCode）等。
+我死死地盯着眼前的屏幕。这是最后的冲刺。
 
-+ 编译程序后即可运行。
+第一题和第二题我都已经获得了理想的分数，第四道题的 30 分基础分也已经到手。
 
-+ 如果懒得下载 IDE，可以使用在线 IDE。如洛谷的在线 IDE (https://www.luogu.com.cn/ide)，将碳原子数输入到输入框中，输出框会返回答案。
+关键就在这第三题。出题人把它放在这里的意图很明显，这是拉差距的题。而这道题的难度，刚好就在我的能力范围附近。
 
-### 代码
+第三道题，「移球游戏」。我已经在这道题上花费了整整一个小时——其实这个速度超出我的预期，在 15 分钟时我就想到了 $O(m^2n)$ 的做法。紧接在第 34 分钟我意外地构造出了一个 $O(n^2m)$ 的做法，理论上可以获得 70 分。
 
-所有的答案均对 $998244353$ 取模。如果想更改模数可以找到 `const LL MOD = xxx` 的部分，把 `xxx` 改为您想要的模数，需要注意的是模数必须是一个质数。注意第三份代码不可以更改模数，否则会导致答案错误。
+但这一切只是理论。现在能不能调出这道题都是个问题。
 
-#### 烷基计数代码
+好在编程过程比较顺利。步步为营地推进，我的代码应该没啥问题。
 
-时间复杂度 $O(n^3)$，可处理 $n \leq 500$ 的数据。
+$\color{blue}\texttt{return 0;}$
 
-```cpp
-#include <iostream>
-#include <cstring>
-#include <cstdio>
+我自信地敲下。
 
-#define Maxn 510
-#define LL long long
+编译一遍就可以上 checker 了。
 
-using namespace std;
+$\color{blue}\texttt{编译成功，用时 0.67s。}$
 
-const LL MOD = 998244353;
+一遍编译过虽然不是什么值得高兴的事，但这是个好兆头，说明在写程序时我的逻辑比较清晰，对应的 bug 就会减少。
 
-inline int read() {
-    int x = 0, f = 1;
-    char c = getchar();
-    while(c < '0' || c > '9') {
-        if(c == '-') f = -1;
-        c = getchar();
-    }
-    while('0' <= c && c <= '9') {
-        x = x * 10 + c - '0';
-        c = getchar();
-    }
-    return x * f;
-}
+**$\color{blue}\texttt{> D:}$**
 
-LL f[Maxn];
+$\color{blue}\texttt{> cd Desktop}$
 
-LL Pow(LL a, LL b) {
-    LL ans = 1, base = a;
-    while(b) {
-        if(b & 1) ans = ans * base % MOD;
-        base = base * base % MOD;
-        b >>= 1;
-    }
-    return ans;
-}
+命令提示符已经来到了存放程序的文件夹下。
 
-LL inv2 = Pow(2, MOD - 2), inv6 = Pow(6, MOD - 2);
+$\color{blue}\texttt{> checker ball1.in ball1.ans}$
 
-int main() {
-    int n = read();
-    f[0] = 1, f[1] = 1;
-    for(int i = 2; i <= n; ++i) {
-        for(int j = 0; j <= n; ++j)
-            for(int k = j; k + j <= n; ++k) {
-                int l = i - 1 - j - k; if(l < k) break;
-                if(j < k && k < l) f[i] += f[j] * f[k] % MOD * f[l] % MOD;
-                else if(j != k && k == l) f[i] += f[j] * f[k] % MOD * (f[k] + 1) % MOD * inv2 % MOD;
-                else if(j == k && k != l) f[i] += f[l] * f[k] % MOD * (f[k] + 1) % MOD * inv2 % MOD;
-                else if(j == k && k == l) f[i] += (f[j] + 2) * (f[j] + 1) % MOD * f[j] % MOD * inv6 % MOD;
-                f[i] %= MOD;
-            }
-    }
-    cout << (f[n] % MOD + MOD) % MOD << endl;
-    return 0;
-}
-```
+心率加速。这只是第一个样例，千万不要让我失望啊。
 
-#### 烷烃计数代码
+颤抖的手按下了回车。
 
-时间复杂度 $O(n^3)$，可处理 $n \leq 500$ 的数据。
+$\color{Green}\texttt{OK}$
 
-```cpp
-#include <iostream>
-#include <cstring>
-#include <cstdio>
+一遍过！好吧，祈祷灵验了。OIer 最希望的事情，「一遍过样例」可是位居前三。
 
-#define Maxn 510
-#define LL long long
+接下来测第二个样例……第一个样例可能比较水，第二个样例一般强度适中，也是调题最常用的样例。
 
-using namespace std;
+$\color{blue}\texttt{> checker ball2.in ball2.ans}$
 
-const LL MOD = 998244353;
+我就不信了，老子今天就解决不掉你！
 
-inline int read() {
-    int x = 0, f = 1;
-    char c = getchar();
-    while(c < '0' || c > '9') {
-        if(c == '-') f = -1;
-        c = getchar();
-    }
-    while('0' <= c && c <= '9') {
-        x = x * 10 + c - '0';
-        c = getchar();
-    }
-    return x * f;
-}
+回车在清脆的按键声中伏了下去。
 
-LL n, m, f[Maxn];
+$\color{Green}\texttt{OK}$
 
-LL Pow(LL a, LL b) {
-    LL ans = 1, base = a;
-    while(b) {
-        if(b & 1) ans = ans * base % MOD;
-        base = base * base % MOD;
-        b >>= 1;
-    }
-    return ans;
-}
+虽然只有一行 OK，但是它蕴含着一个明确而振奋的信息：你的程序完美通过了这个样例测试点。
 
-LL inv2 = Pow(2, MOD - 2), inv6 = Pow(6, MOD - 2), inv24 = Pow(24, MOD - 2);
+两个样例都过了欸…… 接下来只剩第 3 个大样例了。
 
-LL calc() {
-	LL ans = 0;
-	for(int i = 0; i <= m; ++i)
-		for(int j = i; j <= m; ++j)
-			for(int k = j; k <= m; ++k) {
-				int l = n - 1 - i - j - k; if(l > m || l < k) continue;
-				if(i < j  && j < k  && k < l ) ans += f[i] * f[j] % MOD * f[k] % MOD * f[l] % MOD;
-				if(i == j && j < k  && k < l ) ans += f[i] * (f[i] + 1) % MOD * inv2 % MOD * f[k] % MOD * f[l] % MOD;
-				if(i < j  && j == k && k < l ) ans += f[j] * (f[j] + 1) % MOD * inv2 % MOD * f[i] % MOD * f[l] % MOD;
-				if(i < j  && j < k  && k == l) ans += f[k] * (f[k] + 1) % MOD * inv2 % MOD * f[i] % MOD * f[j] % MOD;
-				if(i == j && j == k && k < l ) ans += f[i] * (f[i] + 1) % MOD * (f[i] + 2) % MOD * inv6 % MOD * f[l] % MOD;
-				if(i < j  && j == k && k == l) ans += f[l] * (f[l] + 1) % MOD * (f[l] + 2) % MOD * inv6 % MOD * f[i] % MOD; 
-				if(i == j && j <  k && k == l) ans += f[i] * (f[i] + 1) % MOD * inv2 % MOD * f[k] % MOD * (f[k] + 1) % MOD * inv2 % MOD; 
-				if(i == j && j == k && k == l) ans += f[i] * (f[i] + 1) % MOD * (f[i] + 2) % MOD * (f[i] + 3) % MOD * inv24 % MOD;
-				ans %= MOD;
-			}
-	return ans;
-}
+$\color{blue}\texttt{> checker ball3.in ball3.ans}$
 
-int main() {
-    n = read(), m = (n - 1) / 2;
-    f[0] = 1, f[1] = 1;
-    for(int i = 2; i <= n / 2; ++i) {
-        for(int j = 0; j <= n / 2; ++j)
-            for(int k = j; k + j <= n / 2; ++k) { // j <= k <= l
-                int l = i - 1 - j - k; if(l < k) break;
-                if(j < k && k < l) f[i] += f[j] * f[k] % MOD * f[l] % MOD;
-                else if(j != k && k == l) f[i] += f[j] * f[k] % MOD * (f[k] + 1) % MOD * inv2 % MOD;
-                else if(j == k && k != l) f[i] += f[l] * f[k] % MOD * (f[k] + 1) % MOD * inv2 % MOD;
-                else if(j == k && k == l) f[i] += (f[j] + 2) * (f[j] + 1) % MOD * f[j] % MOD * inv6 % MOD;
-                f[i] %= MOD;
-            }
-    }
-    LL ans = calc();
-    if(!(n & 1)) ans += f[n / 2] * (f[n / 2] + 1) % MOD * inv2 % MOD;
-    cout << ans % MOD << endl;
-    return 0;
-}
-```
+说是大样例，其实这个样例并不大——规模仅仅符合 40 分的测试点。但是用来确认程序无误，这个规模一般已经足够了。
 
-#### 烷基计数优化代码
+回车已经在不经意间被按下。
 
-时间复杂度 $O(n \log n)$，可处理 $n \leq 10^5$ 的数据。
+CPU 中的电信号开始飞驰，内存空间不断被声明又被释放。微小的电流在二极管之间俯冲着，如同一块沸腾的海洋。
 
-```cpp
+但那些电子无论如何也不可能知道它们在做着什么——他们只是 0 和 1 的代言人，承载着不同的电信号。
 
-#pragma GCC optimize(2)
-#include <iostream>
-#include <cstring>
-#include <cstdio>
+然而此时一副清晰的图景已经在某个空间展开——那里有 $31$ 个高度为 $85$ 的通天巨柱——除了第 $31$ 根柱子，每根柱子上面都串着 $85$ 个五颜六色的球。
 
-#define Maxn 800005
-#define rg register
-#define LL long long
+这个空间刚被创造不到 5 毫秒，正当那些球们准备开始享受这里的静谧，一股无形的力量把第 $30$ 根柱子中的最上方的球野蛮地抓起，扔到了第 $31$ 根空柱上，打破了这个空间的宁静。
 
-using namespace std;
+但这远远没有结束。在 1 毫秒内，又有 $34$ 个球被重复这样的过程，伴随着「咚咚」的巨响落在最后一个柱子上。
 
-const LL MOD = 998244353, G = 3;
+然后那个世界突然安静下来。
 
-inline int read() {
-    int x = 0, f = 1;
-    char c = getchar();
-    while(c < '0' || c > '9') {
-        if(c == '-') f = -1;
-        c = getchar();
-    }
-    while('0' <= c && c <= '9') {
-        x = x * 10 + c - '0';
-        c = getchar();
-    }
-    return x * f;
-}
+这可贵的寂静仅仅持续了不到 1 微秒便被打破。一瞬间，第一根柱子上又有 $51$ 个球从美梦中醒来——一阵飓风把它们同样抛到了第 $31$ 根柱子上。现在那个柱子已经满了，$85$ 个球，是一根柱子所允许承载的极限。
 
-inline LL Pow(LL a, LL b) {
-    LL ans = 1, base = a;
-    while(b) {
-        if(b & 1) ans = ans * base % MOD;
-        base = base * base % MOD;
-        b >>= 1;
-    }
-    return ans;
-}
-const LL invG = Pow(G, MOD - 2);
+然而一切都才刚开始。红的，黄的，深绿的球开始从空中呼啸而过，从一根柱子飞向另一根柱子。
 
-LL m, trans[Maxn], f[Maxn], inv[Maxn];
+这一切像极了魔法——一股神秘的力量正操纵着它们，使这些球一个个变得有序，现在第一个柱子上已经堆积了 $82$ 个相同颜色的球。更令人惊讶的是，无论怎么移动，每根柱子上的球总不会超过 $85$ 个。
 
-struct Poly {
-    LL pwI[Maxn], pwG[Maxn];
-    void Ready() {
-        for(int len = 2; len < Maxn; len <<= 1) {
-            pwI[len] = Pow(invG, (MOD - 1) / len);
-            pwG[len] = Pow(G, (MOD - 1) / len);
-            inv[len] = Pow(len, MOD - 2);
-        }
-    }
-    int lstn = 0;
-    inline void NTT(LL *F, bool op, int n) {
-        if(n != lstn) for(int i = 0; i < n; ++i) trans[i] = (trans[i >> 1] >> 1) | ((i & 1) ? (n >> 1) : 0);
-        for(rg int i = 0; i < n; ++i) if(i < trans[i]) swap(F[i], F[trans[i]]);
-        for(int len = 2; len <= n; len <<= 1) {
-            LL base = op ? pwI[len] : pwG[len];
-            for(int i = 0; i < n; i += len) {
-                LL now = 1;
-                for(int k = i; k < i + (len >> 1); ++k) {
-                    LL temp = F[k + (len >> 1)] * now;
-                    F[k + (len >> 1)] = (F[k] - temp) % MOD;
-                    F[k] = (F[k] + temp) % MOD;
-                    now = now * base % MOD;
-                }
-            }
-        }
-        lstn = n;
-    }
-    LL t1[Maxn], t2[Maxn];
-    inline void Getinv(LL *F, LL *invF, int n) {
-        // Get the inv of F, record it in invF
-        for(int i = 0; i < n; ++i) invF[i] = t1[i] = t2[i] = 0;
-        invF[0] = Pow(F[0], MOD - 2);
-        for(int len = 2; len <= n; len <<= 1) {
-            for(int i = 0; i < (len >> 1); ++i) t1[i] = 2 * invF[i];
-            for(int i = 0; i < len; ++i) t2[i] = F[i];
-            NTT(invF, 0, len << 1); NTT(t2, 0, len << 1);
-            for(int i = 0; i < (len << 1); ++i) invF[i] = invF[i] * invF[i] % MOD * t2[i];
-            NTT(invF, 1, len << 1);
-            for(int i = 0; i < len; ++i) invF[i] = (t1[i] - invF[i] * inv[len << 1]) % MOD;
-            for(int i = len; i < (len << 1); ++i) invF[i] = 0;
-        }
-    }
-}poly;
+正如我刚刚所说的，这些电子永远也不可能知道，这个空间的一切就是它们正演绎着的故事。只不过那个空间此时正存在于它的使用者的脑海里——也就是我。
 
-LL a[Maxn], b[Maxn], c[Maxn], d[Maxn], e[Maxn], inve[Maxn];
-inline void init(int len) {
-    for(int i = 0; i < len; ++i) a[i] = b[i] = c[i] = d[i] = e[i] = 0;
-}
+那个空间的故事此时仍在如火如荼地上演着，现在第一根柱子上已经汇聚了 $84$ 个同颜色的球。只需要最后一次移动，第一根柱子就完成了它的任务……
 
-void newton_method() {
-    f[0] = 1;
-    int n = 1; while(n <= m) n <<= 1;
-    for(int len = 2; len <= n; len <<= 1) {
-        init(len);
-        for(int i = 0; i < (len >> 1); ++i) if(i * 2 < len) a[i * 2] = f[i]; else break;
-        for(int i = 0; i < (len >> 1); ++i) if(i * 3 < len) b[i * 3] = f[i]; else break;
-        for(int i = 0; i < (len >> 1); ++i) c[i] = f[i];
-        poly.NTT(a, 0, len << 1); poly.NTT(b, 0, len << 1); poly.NTT(c, 0, len << 1);
-        for(int i = 0; i < (len << 1); ++i) {
-            d[i] = c[i] * c[i] % MOD * c[i] + 3 * a[i] * c[i] + 2 * b[i];
-            e[i] = 3 * c[i] * c[i] + 3 * a[i];
-        }
-        poly.NTT(d, 1, len << 1); poly.NTT(e, 1, len << 1);
-        for(int i = len; i < len * 1.5; ++i) d[i] = e[i] = 0;
-        for(int i = 0; i < len; ++i) d[i] = d[i] * inv[len << 1], e[i] = e[i] * inv[len << 1];
-        for(int i = len - 1; i; --i) d[i] = d[i - 1] - 6 * f[i], e[i] = e[i - 1];
-        d[0] = -6 * f[0] + 6; e[0] = -6;
-        poly.Getinv(e, inve, len);
-        poly.NTT(d, 0, len << 1); poly.NTT(inve, 0, len << 1);
-        for(int i = 0; i < (len << 1); ++i) d[i] = d[i] * inve[i] % MOD;
-        poly.NTT(d, 1, len << 1);
-        for(int i = 0; i < len; ++i) f[i] = f[i] - d[i] * inv[len << 1];
-    }
-}
-int main() {
-    m = read();
-    poly.Ready(); newton_method();
-    cout << (f[m] % MOD + MOD) % MOD << endl;
-    return 0;
-}
-```
+另一端，第 $30$ 根柱子上，一个球落了上去。
+
+不过这根柱子已经满了。一瞬间，这个空间的一切化为灰烬。
+
+$\color{Red}\texttt{FAIL   Error code: A 12759.}$
+
+程序运行中止。校验器已完成反馈。
+
+
+
+
+
+### Chapter 1
+
+「同学们，这个暑假我们就在这个机房里训练了。记住这是 1# 网络教室，到时候不要走错了。」
+
+伴随着声音，一个身影走上讲台。
+
+教室里坐了很多人，约莫有 30 来个。靠后的两个同学急忙关掉了游戏窗口。
