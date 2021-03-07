@@ -1,0 +1,2 @@
+# lightnovel
+TYZ's lightnovel!
