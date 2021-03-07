@@ -26,7 +26,7 @@
 
 好在编程过程比较顺利。步步为营地推进，我的代码应该没啥问题。
 
-$\color{blue}\texttt{return 0;}$
+$\texttt{return 0;}$
 
 我自信地敲下。
 
